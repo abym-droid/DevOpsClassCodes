@@ -23,11 +23,12 @@ pipeline{
 			steps{
 				sh 'mvn pmd:pmd'
 			}
-			//post{
-			//	always{
-			//		pmd pattern:'target/pmd.xml'
-			//	}
-			
+			post{
+				always{
+
+					pmd pattern: '**/target/pmd.xml'
+				}
+			}
 		}
 
 		stage('unit-test'){
