@@ -5,7 +5,7 @@ pipeline{
 		jdk 'myjava'
 		maven 'my-maven'
 	}
-	agents none
+	agent none
 
 	stages{
 
@@ -46,9 +46,8 @@ pipeline{
 				sh 'mvn cobertura:cobertura -Dcobertura.report.format=xml'
 			}
 			post{
-
 				always{
-					cobertura coberturaReportFile 'target/site/cobertura/coverage.xml'
+					cobertura coberturaReportFile: 'target/site/cobertura/coverage.xml'
 				}
 			}
 		}
