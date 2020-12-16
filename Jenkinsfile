@@ -2,8 +2,8 @@ pipeline{
 	
 	tools{
 
-		'jdk myjava'
-		'maven my-maven'
+		jdk 'myjava'
+		maven 'my-maven'
 	}
 	agents none
 
@@ -25,7 +25,7 @@ pipeline{
 			}
 			post{
 				always{
-					pmd pattern: 'target/pmd.xml'
+					pmd pattern:'target/pmd.xml'
 				}
 			}
 		}
