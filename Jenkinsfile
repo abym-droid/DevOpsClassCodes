@@ -63,23 +63,22 @@ pipeline{
 
 		stage('deploy'){
 
-			agent any
-			steps{
-				sh 'rm -rf dockerJenkins'
-				sh 'mkdir dockerJenkins'
-				sh 'cd dockerJenkins'
-				sh 'cp /var/lib/jenkins/workspace/package/target/addressbook.war .'
-				sh 'touch Dockerfile'
-				sh 'cat <<EOT>> Dockerfile'
-				sh 'FROM tomcat'
-				sh 'ADD addressbook.war /usr/local/tomcat/webapps'
-				sh 'CMD ["catalina.sh", "run"]'
-				sh 'EXPOSE 8080'
-				sh 'EOT'
-				sh 'sudo docker build -t myimage:$BUILD_NUMBER .'
-				sh 'sudo docker run -itd -P myimage:$BUILD_NUMBER'
-		
-			}
-		}
+                        agent any
+                        steps{
+                                sh 'rm -rf dockerJenkins'
+                                sh 'mkdir dockerJenkins'
+                                sh 'cd dockerJenkins'
+                                sh 'cp /var/lib/jenkins/workspace/package/target/addressbook.war .'
+                                sh 'touch Dockerfile'
+                                sh 'echo "FROM tomcat" >> Dockerfile'
+                                sh 'echo "ADD addressbook.war /usr/local/tomcat/webapps" >> Dockerfile'
+                                sh 'echo "CMD ["catalina.sh", "run"]" >> Dockerfile'
+                                sh 'echo "EXPOSE 8080" >> Dockerfile'
+                                sh 'sudo docker build -t myimage:$BUILD_NUMBER .'
+                                sh 'sudo docker run -itd -P myimage:$BUILD_NUMBER'
+
+                        }
+                }
+
 	}
 }
