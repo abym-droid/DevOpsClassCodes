@@ -52,8 +52,16 @@ pipeline{
 				}
 			}
 		}
-
+		
 		stage('package'){
+
+			agent any
+			steps{
+				sh 'mvn package'
+			}
+		}
+
+		stage('deploy'){
 
 			agent any
 			steps{
@@ -70,7 +78,7 @@ pipeline{
 				sh 'EOT'
 				sh 'sudo docker build -t myimage:$BUILD_NUMBER .'
 				sh 'sudo docker run -itd -P myimage:$BUILD_NUMBER'
-				sh 'echo "CMD ["cata" >> Dockerfile'
+		
 			}
 		}
 	}
