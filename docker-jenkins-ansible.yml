@@ -1,0 +1,28 @@
+---
+# This is Jenkins Master
+- hosts: jenkinsserver 
+  become: true
+  become_user: root
+  tasks:
+  - name: Get the addressbook.war from Jenkins server package job directory and copy to ACM /tmp directory
+    fetch: src=/var/lib/jenkins/workspace/package/target/addressbook.war dest=/tmp
+  - name: Get the dockerfile from Jenkins server package job directory and copy to ACM /tmp directory
+    fetch: src=/var/lib/jenkins/workspace/package/dockerfile dest=/tmp
+
+# This is a separate Ansible host VM managed through ACM
+- hosts: webservers 
+  become: true
+  become_user: root
+  tasks:
+  - name: Install docker
+    yum: name=docker state=present
+  - name: Start docker
+    service: name=docker state=started
+  - name: Copy addressbook.war to ansible host
+    copy: src=/tmp/172.31.83.226/var/lib/jenkins/workspace/package/target/addressbook.war dest=/tmp/addressbook/
+  - name: Copy dockerfile to ansible host
+    copy: src=/tmp/172.31.83.226/var/lib/jenkins/workspace/package/dockerfile dest=/tmp/addressbook/
+  - name: Build the dockerfile
+    command: chdir=/tmp/addressbook docker build -t deploy-jenkins:ansible .
+  - name: Run the docker image
+    command: docker run -itd -P deploy-jenkins:ansible
