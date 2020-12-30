@@ -1,0 +1,19 @@
+---
+- hosts: webservers
+  become: true
+  become_user: root
+  tasks:
+  - name: Install docker
+    yum: name=docker state=present
+  - name: Start docker
+    service: name=docker state=started
+  - name: Get the addressbook and dockerfile from github
+    git: repo="https://github.com/abym-droid/DevOpsClassCodes.git" dest=$pwd
+  - name: Build the addressbook war file
+    shell: "mvn package"
+  - name: Copy addressbook.war file to dockerdir
+    shell: "cp $pwd/target/addressbook.war $pwd"
+  - name: Build the dockerfile
+    command: chdir=$pwd docker build -t deploy-jenkins:ansible .
+  - name: Run the docker image
+    command: docker run -itd -P deploy-jenkins:ansible
