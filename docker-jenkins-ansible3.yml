@@ -8,9 +8,9 @@
   - name: Start docker
     service: name=docker state=started
   - name: Get the addressbook and dockerfile from github
-    git: repo="https://github.com/abym-droid/DevOpsClassCodes.git" dest=$pwd
+    git: repo="https://github.com/abym-droid/DevOpsClassCodes.git" dest=/home/user1
   - name: Build the addressbook war file
-    shell: "cd $pwd && mvn package"
+    shell: "mvn package"
   - name: Copy addressbook.war file to dockerdir
     shell: "cp $pwd/target/addressbook.war $pwd"
   - name: Build the dockerfile
