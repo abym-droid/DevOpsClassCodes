@@ -10,7 +10,7 @@
   - name: Get the addressbook and dockerfile from github
     git: repo="https://github.com/abym-droid/DevOpsClassCodes.git" dest=$pwd
   - name: Build the addressbook war file
-    shell: "mvn package"
+    shell: "cd $pwd && mvn package"
   - name: Copy addressbook.war file to dockerdir
     shell: "cp $pwd/target/addressbook.war $pwd"
   - name: Build the dockerfile
