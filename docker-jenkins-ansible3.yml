@@ -8,12 +8,12 @@
   - name: Start docker
     service: name=docker state=started
   - name: Get the addressbook and dockerfile from github
-    git: repo="https://github.com/abym-droid/DevOpsClassCodes.git" dest=/home/user1
+    git: repo="https://github.com/abym-droid/DevOpsClassCodes.git" dest=/home/user1/dockerdir
   - name: Build the addressbook war file
-    shell: "mvn package"
+    shell: "cd /home/user1/dockerdir && mvn package"
   - name: Copy addressbook.war file to dockerdir
-    shell: "cp $pwd/target/addressbook.war $pwd"
+    shell: "cp /home/user1/dockerdir/target/addressbook.war /home/user1/dockerdir"
   - name: Build the dockerfile
-    command: chdir=$pwd docker build -t deploy-jenkins:ansible .
+    command: chdir=/home/user1/dockerdir docker build -t deploy-jenkins:ansible .
   - name: Run the docker image
     command: docker run -itd -P deploy-jenkins:ansible
